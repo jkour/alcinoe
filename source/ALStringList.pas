@@ -548,7 +548,7 @@ type
   end;
 
   {------------------------}
-  {$IF CompilerVersion > 32} // tokyo
+  {$IF CompilerVersion > 33} // rio
     {$MESSAGE WARN 'Check if System.classes.TStrings didn't change and adjust the IFDEF'}
   {$IFEND}
   TALStringsU = class(TPersistent)
@@ -678,7 +678,7 @@ type
   TALStringListSortCompareU = reference to function(List: TALStringListU; Index1, Index2: Integer): Integer;
 
   {------------------------}
-  {$IF CompilerVersion > 32} // tokyo
+  {$IF CompilerVersion > 33} // rio
     {$MESSAGE WARN 'Check if System.classes.TStringList didn't change and adjust the IFDEF'}
   {$IFEND}
   TALStringListU = class(TALStringsU)
