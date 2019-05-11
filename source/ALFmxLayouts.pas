@@ -1,6 +1,6 @@
 unit ALFmxLayouts;
 
-{$IF CompilerVersion > 32} // tokyo
+{$IF CompilerVersion > 33} // rio
   {$MESSAGE WARN 'Check if FMX.Layouts.pas was not updated and adjust the IFDEF'}
 {$ENDIF}
 

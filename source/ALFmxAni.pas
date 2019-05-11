@@ -1,6 +1,6 @@
 unit ALFmxAni;
 
-{$IF CompilerVersion > 32} // tokyo
+{$IF CompilerVersion > 33} // rio
   {$MESSAGE WARN 'Check if FMX.Ani.pas was not updated and adjust the IFDEF'}
 {$ENDIF}
 
