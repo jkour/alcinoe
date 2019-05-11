@@ -29,7 +29,7 @@ type
   TALPointDType = array [0..1] of Double;
 
   {~~~~~~~~~~~~~~~~~~~~~~~~}
-  {$IF CompilerVersion > 32} // tokyo
+  {$IF CompilerVersion > 33} // Rio
     {$MESSAGE WARN 'Check if System.Types.TPointf still having the same implementation and adjust the IFDEF'}
   {$IFEND}
   PALPointD = ^TALPointD;
@@ -100,7 +100,7 @@ type
   end;
 
   {~~~~~~~~~~~~~~~~~~~~~~~~}
-  {$IF CompilerVersion > 32} // tokyo
+  {$IF CompilerVersion > 33} // rio
     {$MESSAGE WARN 'Check if System.Types.TSizef still having the same implementation and adjust the IFDEF'}
   {$IFEND}
   PALSizeD = ^TALSizeD;
@@ -137,7 +137,7 @@ type
   end;
 
   {~~~~~~~~~~~~~~~~~~~~~~~~}
-  {$IF CompilerVersion > 32} // tokyo
+  {$IF CompilerVersion > 33} // rio
     {$MESSAGE WARN 'Check if System.Types.TRectf still having the same implementation and adjust the IFDEF'}
   {$IFEND}
   PALRectD = ^TALRectD;
@@ -280,7 +280,7 @@ type
   end;
 
 {~~~~~~~~~~~~~~~~~~~~~~~~}
-{$IF CompilerVersion > 32} // tokyo
+{$IF CompilerVersion > 33} // rio
   {$MESSAGE WARN 'Check if functions below implemented in System.Types still having the same implementation and adjust the IFDEF'}
 {$IFEND}
 function ALRectWidth(const Rect: TRect): Integer; inline; overload;
