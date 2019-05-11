@@ -6,7 +6,7 @@ Description:  TALIntegerList or TALDoubleList that work exactly
 
 unit ALQuickSortList;
 
-{Exemple of a QuickSort Algorithm :
+{Example of a QuickSort Algorithm :
 
 procedure _SampleQuickSort(aArray: TArrayOfxxx; L, R: Integer);
 
