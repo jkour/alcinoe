@@ -1551,6 +1551,7 @@ function TALPerlRegEx.Compile(const RaiseException: boolean = True): boolean;
 var
   Error: PAnsiChar;
   ErrorOffset: Integer;
+  ToWide: WideString;
 begin
   result := False;
   CleanUp;
@@ -1558,7 +1559,12 @@ begin
     if RaiseException then raise ERegularExpressionError.CreateRes(@SRegExMissingExpression)
     else exit;
   end;
+{$IF CompilerVersion > 32} // rio
+  ToWide:=WideString(FRegEx);
+  FPattern := pcre_compile(PWideChar(ToWide), FPCREOptions, @Error, @ErrorOffset, FCharTable);
+{$ELSE}
   FPattern := pcre_compile(PAnsiChar(FRegEx), FPCREOptions, @Error, @ErrorOffset, FCharTable);
+{$IFEND}
   if FPattern = nil then begin
     if RaiseException then raise ERegularExpressionError.CreateResFmt(@SRegExExpressionError, [ErrorOffset, String(Error)])
     else exit;
@@ -1929,6 +1935,7 @@ end;
 function TALPerlRegEx.Match: Boolean;
 var
   I, Opts: Integer;
+  ToWide: WideString;
 begin
   ClearStoredGroups;
   if not Compiled then
@@ -1941,7 +1948,12 @@ begin
     Opts := Opts or PCRE_NOTEOL;
   if preNotEmpty in State then
     Opts := Opts or PCRE_NOTEMPTY;
+{$IF CompilerVersion > 32} // rio
+  ToWide:=WideString(FSubjectPChar);
+  OffsetCount := pcre_exec(FPattern, FHints, PWideChar(ToWide), FStop, 0, Opts, @Offsets[0], High(Offsets));
+{$ELSE}
   OffsetCount := pcre_exec(FPattern, FHints, FSubjectPChar, FStop, 0, Opts, @Offsets[0], High(Offsets));
+{$IFEND}
   Result := OffsetCount > 0;
   // Convert offsets into AnsiString indices
   if Result then
@@ -1964,6 +1976,7 @@ var aOpts: Integer;
     aOffsetCount: Integer;
     aOffsets: array[0..(cALPerlRegExMAXSUBEXPRESSIONS+1)*3] of Integer;
     i: integer;
+    ToWide: WideString;
 begin
   aSubjectPChar := PAnsiChar(aSubject);
   aStop := Length(aSubject);
@@ -1972,7 +1985,12 @@ begin
   else aOpts := 0;
   if preNotEOL in State then aOpts := aOpts or PCRE_NOTEOL;
   if preNotEmpty in State then aOpts := aOpts or PCRE_NOTEMPTY;
+{$IF CompilerVersion > 32} // rio
+  ToWide:=WideString(aSubjectPChar);
+  aOffsetCount := pcre_exec(FPattern, FHints, PWideChar(aSubjectPChar), aStop, 0, aOpts, @aOffsets[0], High(aOffsets));
+{$ELSE}
   aOffsetCount := pcre_exec(FPattern, FHints, aSubjectPChar, aStop, 0, aOpts, @aOffsets[0], High(aOffsets));
+{$IFEND}
   Result := aOffsetCount > 0;
   aGroups.Clear;
   if Result then begin
@@ -1985,6 +2003,7 @@ end;
 function TALPerlRegEx.MatchAgain: Boolean;
 var
   I, Opts: Integer;
+  ToWide: WideString;
 begin
   ClearStoredGroups;
   if not Compiled then
@@ -2000,7 +2019,12 @@ begin
   if FStart-1 > FStop then
     OffsetCount := -1
   else
+{$IF CompilerVersion > 32} // rio
+    ToWide:=WideString(FRegEx);
+    OffsetCount := pcre_exec(FPattern, FHints, PWideChar(ToWide), FStop, FStart-1, Opts, @Offsets[0], High(Offsets));
+{$ELSE}
     OffsetCount := pcre_exec(FPattern, FHints, FSubjectPChar, FStop, FStart-1, Opts, @Offsets[0], High(Offsets));
+{$IFEND}
   Result := OffsetCount > 0;
   // Convert offsets into AnsiString indices
   if Result then
@@ -2017,8 +2041,15 @@ end;
 
 {****************************************************************}
 function TALPerlRegEx.NamedGroup(const Name: AnsiString): Integer;
+var
+  toWide: WideString;
 begin
+{$IF CompilerVersion > 32} // rio
+  toWide:=WideString(Name);
+  Result := pcre_get_stringnumber(FPattern, PWideChar(toWide));
+{$ELSE}
   Result := pcre_get_stringnumber(FPattern, PAnsiChar(Name));
+{$IFEND}
 end;
 
 {****************************************}
